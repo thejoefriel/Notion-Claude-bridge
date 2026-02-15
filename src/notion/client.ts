@@ -6,7 +6,6 @@ import {
   DatabaseObjectResponse,
   PartialBlockObjectResponse,
   SearchResponse,
-  CommentObjectResponse,
   QueryDatabaseParameters,
 } from "@notionhq/client/build/src/api-endpoints.js";
 
@@ -159,9 +158,9 @@ export async function searchNotion(query: string): Promise<SearchResponse> {
 export async function addComment(
   pageId: string,
   text: string
-): Promise<CommentObjectResponse> {
+): Promise<void> {
   const notion = getNotionClient();
-  return notion.comments.create({
+  await notion.comments.create({
     parent: { page_id: pageId },
     rich_text: [{ type: "text", text: { content: text } }],
   });
