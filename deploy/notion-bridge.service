@@ -1,0 +1,36 @@
+# Notion Bridge - systemd service file
+#
+# Copy this file to /etc/systemd/system/notion-bridge.service
+# Then run:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable notion-bridge
+#   sudo systemctl start notion-bridge
+
+[Unit]
+Description=Notion Bridge MCP Server
+After=network.target
+
+[Service]
+Type=simple
+User=notion-bridge
+Group=notion-bridge
+WorkingDirectory=/opt/notion-bridge
+ExecStart=/usr/bin/node dist/index.js
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=notion-bridge
+
+# Environment
+EnvironmentFile=/etc/notion-bridge/.env
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/notion-bridge
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
